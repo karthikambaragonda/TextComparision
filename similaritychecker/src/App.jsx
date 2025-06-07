@@ -20,7 +20,7 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:3000");
+        const response = await axios.get("https://textcomparision.onrender.com");
         console.log("API called on load:", response);
       } catch (error) {
         console.error("Error calling API on load:", error);
@@ -29,19 +29,8 @@ function App() {
 
     fetchData();
   }, []);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response1 = await axios.get("https://karthik-portfolio.onrender.com/");
-        console.log("API called on load:", response1);
-      } catch (error) {
-        console.error("Error calling API on load:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
+  
+   
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -67,7 +56,7 @@ function App() {
     }
 
     try {
-      const response = await axios.post('http://localhost:3000/compare', formData);
+      const response = await axios.post('https://textcomparision.onrender.com/compare', formData);
       setSimilarity(response.data.similarity);
     } catch (err) {
       setError(err.response?.data?.error || 'Something went wrong');
