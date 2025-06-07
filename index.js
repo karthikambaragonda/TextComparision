@@ -4,6 +4,7 @@ import { exec } from 'child_process';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
+import cors from 'cors';
 
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
@@ -11,6 +12,8 @@ const __dirname = path.dirname(__filename);
 
 // Middleware to parse urlencoded form data (for text inputs)
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(cors()); 
 
 // EJS Setup
 app.set('view engine', 'ejs');
@@ -41,9 +44,11 @@ app.post('/compare', upload.fields([{ name: 'file1' }, { name: 'file2' }]), (req
         fs.writeFileSync(filePath1, text1, 'utf-8');
         fs.writeFileSync(filePath2, text2, 'utf-8');
 
-        exec(`python3 "python/compare.py" "${filePath1}" "${filePath2}"`, (error, stdout) => {
+        exec(`python "python/compare.py" "${filePath1}" "${filePath2}"`, (error, stdout) => {
             if (error) return handleError('Error processing texts: Please check your inputs and try again.');
-            res.render('index', { similarity: stdout.trim(), error: null });
+            // res.render('index', { similarity: stdout.trim(), error: null });
+            res.json({ similarity: stdout.trim() });
+            
         });
 
     } else if (req.files['file1'] && req.files['file2']) {
@@ -52,7 +57,8 @@ app.post('/compare', upload.fields([{ name: 'file1' }, { name: 'file2' }]), (req
 
         exec(`python "python/compare.py" "${file1}" "${file2}"`, (error, stdout) => {
             if (error) return handleError('Error processing files: Please ensure the files are valid text files.');
-            res.render('index', { similarity: stdout.trim(), error: null });
+            // res.render('index', { similarity: stdout.trim(), error: null });
+            res.json({ similarity: stdout.trim() });
         });
 
     } else {
