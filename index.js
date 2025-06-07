@@ -41,7 +41,7 @@ app.post('/compare', upload.fields([{ name: 'file1' }, { name: 'file2' }]), (req
         fs.writeFileSync(filePath1, text1, 'utf-8');
         fs.writeFileSync(filePath2, text2, 'utf-8');
 
-        exec(`python "python/compare.py" "${filePath1}" "${filePath2}"`, (error, stdout) => {
+        exec(`python3 "python/compare.py" "${filePath1}" "${filePath2}"`, (error, stdout) => {
             if (error) return handleError('Error processing texts: Please check your inputs and try again.');
             res.render('index', { similarity: stdout.trim(), error: null });
         });
